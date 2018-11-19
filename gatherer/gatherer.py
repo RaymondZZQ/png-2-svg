@@ -8,6 +8,7 @@ import time
 from urllib.request import urlopen
 
 from datasets.Icons8 import DatasetIcon8
+from datasets.MaterialIcons import DatasetMaterialIcons
 
 MAX_DOWNLOADS = 10
 
@@ -21,6 +22,10 @@ def rescale(size, data):
     return result.getbuffer()
 
 
+def no_transform(el):
+    return el
+
+
 class ImageDownloader(threading.Thread):
     def __init__(self, id, url_queue, directory):
         threading.Thread.__init__(self)
@@ -30,23 +35,27 @@ class ImageDownloader(threading.Thread):
 
     def run(self):
         while True:
-            (name, url_png, url_svg) = self.queue.get()
+            (name, url_png, url_svg, png_trans, svg_trans) = self.queue.get()
 
-            logger.info("Downloading image {} ({})({})".format(name, url_png, url_svg))
+            if png_trans is None:
+                png_trans = no_transform
+            if svg_trans is None:
+                svg_trans = no_transform
 
             try:
                 # download png
                 download_path = self.directory / 'png' / '{}.png'.format(name)
-                with urlopen(url_png) as image, download_path.open('wb') as f:
-                    f.write(rescale(128, image.read()))
+                with urlopen(url_png, timeout=5) as image, download_path.open('wb') as f:
+                    f.write(rescale(128, png_trans(image.read())))
 
                 # download svg
                 download_path = self.directory / 'svg' / '{}.svg'.format(name)
-                with urlopen(url_svg) as image, download_path.open('w') as f:
-                    f.write(image.read().decode('utf-8'))
+                with urlopen(url_svg, timeout=5) as image, download_path.open('w') as f:
+                    f.write(svg_trans(image.read()).decode('utf-8'))
             except Exception as e:
                 logger.info("Error downloading {}: {}".format(name, e))
             finally:
+                logger.info("Downloaded image {} ({})({})".format(name, url_png, url_svg))
                 self.queue.task_done()
 
 
@@ -55,6 +64,7 @@ if __name__ == '__main__':
 
     url_queue = queue.Queue()
     datasets = [
+        DatasetMaterialIcons(),
         DatasetIcon8()
     ]
 

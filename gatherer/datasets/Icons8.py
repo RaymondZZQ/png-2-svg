@@ -17,7 +17,6 @@ class DatasetIcon8 (Dataset):
         super(DatasetIcon8, self).__init__('Icons8')
 
     def get_image_urls(self, amount):
-        print(self.offset)
         url = self.base_url.format(amount, self.offset)
 
         self._log('Fetching icons ({})'.format(url))
@@ -31,7 +30,9 @@ class DatasetIcon8 (Dataset):
             (
                 '{}-{}'.format(self.name, icon['name']),
                 self.base_url_png.format(icon['id']),
-                self.base_url_svg.format(icon['id'])
+                self.base_url_svg.format(icon['id']),
+                None,
+                None
             )
             for icon in data['icons']
         ]

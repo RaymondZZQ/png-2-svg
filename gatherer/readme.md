@@ -7,6 +7,7 @@ After looking at the top results and the ease of scraping the sites I found two 
 
 So I end up with three sources:
 - [Material Design Icons](https://material.io/tools/icons/)
+    - 5220 icons: 5 different styles, 1044 icons per style
 - [Icons8](https://icons8.com) - [API](https://icons8.docs.apiary.io/#)
 	- not all svg icons are free: so get 403 Forbidden for the svg icons
 	- category: free-icons (10 000+)
@@ -16,7 +17,7 @@ So I end up with three sources:
 ### Another key aspect of the training data is consistency. 
 Two important aspects:
 - resolution, as high as possible for png: -> rescale all to 128px
-	- material ui: highest resolution is 48dpi and 2x -> 96x96 px
+	- material ui: highest resolution is 48dpi and 2x -> 96x96 px. Rescaling leads to poor quality. **Will this have an impact on the neural net performance???**
 	- icons8: 500px
 	- iconfinder: 
 - colors?
