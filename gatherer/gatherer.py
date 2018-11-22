@@ -7,8 +7,9 @@ import threading
 import time
 from urllib.request import urlopen
 
-from datasets.Icons8 import DatasetIcon8
+from datasets.Icons8 import DatasetIcons8
 from datasets.MaterialIcons import DatasetMaterialIcons
+from datasets.IconFinder import DatasetIconFinder
 
 MAX_DOWNLOADS = 10
 
@@ -65,7 +66,8 @@ if __name__ == '__main__':
     url_queue = queue.Queue()
     datasets = [
         DatasetMaterialIcons(),
-        DatasetIcon8()
+        DatasetIcons8(),
+        DatasetIconFinder()
     ]
 
     download_dir = Path('../dataset')

@@ -1,11 +1,8 @@
 from .Dataset import Dataset
 import io
-import logging
 import re
 from urllib.request import urlopen
 import zipfile
-
-logger = logging.getLogger(__name__)
 
 
 def get_png_from_zip(zip):
